@@ -17,27 +17,36 @@ public class Client {
             int serverPort = 9806;
             System.out.println("Client Started");
 
-            //read from keyboard
-            BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
-            System.out.println("Enter a string: ");
-            String str = userInput.readLine();
+            while(true) {
+                //read from keyboard
+                BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
+                System.out.println("Enter a string: ");
+                String str = userInput.readLine();
 
-            //send to server
-            byte[] sendBuffer = str.getBytes();
-            DatagramPacket sendPacket = new DatagramPacket(sendBuffer, sendBuffer.length, serverAddress, serverPort);
-            socket.send(sendPacket);
-            System.out.println("Message sent to Server");
+                //exit
+                if (str.equalsIgnoreCase("exit")) {
+                    System.out.println("Sending exit command to server.");
+                    byte[] sendBuffer = str.getBytes();
+                    DatagramPacket sendPacket = new DatagramPacket(sendBuffer, sendBuffer.length, serverAddress, serverPort);
+                    socket.send(sendPacket);
+                    System.out.println("Exiting client.");
+                    break;
+                }
 
-            //receive from server
-            byte[] recieveFromServer = new byte[1024];
-            while(true){
-                DatagramPacket receivePacket = new DatagramPacket(recieveFromServer, recieveFromServer.length);
-                socket.receive(receivePacket);
-                String receivedData = new String(receivePacket.getData(), 0, receivePacket.getLength());
-                System.out.println("Message Received from Server");
-                System.out.println("Length of String: "+receivedData.length());
+                //send to server
+                byte[] sendBuffer = str.getBytes();
+                DatagramPacket sendPacket = new DatagramPacket(sendBuffer, sendBuffer.length, serverAddress, serverPort);
+                socket.send(sendPacket);
+                System.out.println("Message sent to Server");
+
+                //receive from server
+                byte[] recieveFromServer = new byte[1024];
+                    DatagramPacket receivePacket = new DatagramPacket(recieveFromServer, recieveFromServer.length);
+                    socket.receive(receivePacket);
+                    String receivedData = new String(receivePacket.getData(), 0, receivePacket.getLength());
+                    System.out.println("Message Received from Server");
+                    System.out.println("Length of String: " + receivedData.length());
             }
-
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -21,6 +21,11 @@ public class Server {
                 String receivedData = new String(receivePacket.getData(), 0, receivePacket.getLength());
                 System.out.println("Message Received from client");
 
+                if (receivedData.equalsIgnoreCase("exit")) {
+                    System.out.println("Client sent exit command. Server shutting down.");
+                    break;
+                }
+
                 //send back to client
                 String responseData = receivedData;
                 byte[] responseDataBytes = responseData.getBytes();
